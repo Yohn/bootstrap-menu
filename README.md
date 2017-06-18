@@ -65,127 +65,80 @@ Usage
 
 BootstrapMenu receives a string with the selector of the elements to listen to as first argument, and an `options` object as second argument.
 
-The `options` object must have at least an `actions` array containing the actions to show in the context menu.
+The `options` object must have at least a `menuItems` array containing the items to show in the context menu.
 
 Basic example:
 
 ```js
 var menu = new BootstrapMenu('#button', {
-  actions: [{
-      name: 'Action',
+  menuItems: [{
+      name: 'Item',
       onClick: function() {
-        // run when the action is clicked
+        // run when the item is clicked
       }
     }, {
-      name: 'Another action',
+      name: 'Another item',
       onClick: function() {
-        // run when the action is clicked
+        // run when the item is clicked
       }
     }, {
-      name: 'A third action',
+      name: 'A third item',
       onClick: function() {
-        // run when the action is clicked
+        // run when the item is clicked
       }
   }]
 });
 ```
 
-Extended example ([live demo](https://dgoguerra.github.io/bootstrap-menu/demos.html#demo4)):
-
-```html
-<table>
-  <tr>
-    <th>#</th>
-    <th>Name</th>
-    <th>Description</th>
-  </tr>
-  <!-- the modal will open right-clicking anywhere inside a .demoTableRow -->
-  <tr class="demoTableRow" data-row-id="1">
-    <td>1</td>
-    <td>First row</td>
-    <td>Lorem ipsum dolor sit amet</td>
-  </tr>
-  <tr class="demoTableRow" data-row-id="2">
-    <td>2</td>
-    <td>Second row</td>
-    <td>Nemo enim ipsam voluptatem quia voluptas</td>
-  </tr>
-  <tr class="demoTableRow" data-row-id="3">
-    <td>3</td>
-    <td>Third row</td>
-    <td>Ut enim ad minima veniam</td>
-  </tr>
-</table>
-```
+Extended example - with divider and submenu:
 
 ```js
-/* A centralized container of the table data. You could hold the
- * row-specific data in a data-whatever-info="" attribute in each
- * row, you decide what fetchElementData() does!
- */
-var tableRows = {
-  '1': { name: 'First row', isEditable: true, isRemovable: true },
-  '2': { name: 'Second row', isEditable: true, isRemovable: true },
-  '3': { name: 'Third row', isEditable: true, isRemovable: true }
-};
-
-var menu = new BootstrapMenu('.demoTableRow', {
-  /* $rowElem is the jQuery element where the menu was opened. The
-   * returned value is the `row` argument passed to each function. */
-  fetchElementData: function($rowElem) {
-    var rowId = $rowElem.data('rowId');
-    return tableRows[rowId];
+var menu = new BootstrapMenu('#subMenuDemo', {
+  menuItems: [{
+    name: 'Edit name',
+    iconClass: 'fa-pencil',
+    onClick: function(row) { /* ... */ },
+    isEnabled: function(row) { /* ... */}
   },
-  /* group actions by their id to make use of separators between
-   * them in the context menu. Actions not added to any group with
-   * this option will appear in a default group of their own. */
-  actionsGroups: [
-    ['setEditable', 'setUneditable' ],
-    ['deleteRow']
-  ],
-  /* you can declare 'actions' as an object instead of an array,
-   * and its keys will be used as action ids. */
-  actions: {
-    editName: {
-      name: 'Edit name',
-      iconClass: 'fa-pencil',
-      onClick: function(row) { /* ... */ },
-      isEnabled: function(row) {
-        return row.isEditable;
-      }
-    },
-    editDescription: {
+  {
       name: 'Edit description',
       iconClass: 'fa-pencil',
       onClick: function(row) { /* ... */ },
-      isEnabled: function(row) {
-        return row.isEditable;
+      isEnabled: function(row) { /* ... */}
+  },
+  {
+      divider: true
+  }
+  {
+    name: 'Submenu Items',
+    iconClass: 'fa-bars',
+    classNames: 'dropdown-submenu',
+    onClick: function(row) { /* ... */ },
+    isShown: function(row) { /* ... */},
+    subMenuItems: [
+      {
+        name: 'Add',
+        iconClass: 'fa-plus',
+        onClick: function(row) { /* ... */ }
+      },
+      {
+        name: 'Remove',
+        iconClass: 'fa-remove',
+        onClick: function(row) { /* ... */ }
       }
-    },
-    setEditable: {
-      name: 'Set editable',
-      iconClass: 'fa-unlock',
-      onClick: function(row) { /* ... */ },
-      isShown: function(row) {
-        return !row.isEditable;
-      }
-    },
-    setUneditable: {
-      name: 'Set uneditable',
-      iconClass: 'fa-lock',
-      onClick: function(row) { /* ... */ },
-      isShown: function(row) {
-        return row.isEditable;
-      }
-    },
-    deleteRow: {
-      name: 'Delete row',
-      iconClass: 'fa-trash-o',
-      onClick: function(row) { /* ... */ },
-      isEnabled: function(row) {
-        return row.isEditable && row.isRemovable;
-      }
-    }
+    ]
+  },
+  {
+    name: 'Set uneditable',
+    iconClass: 'fa-lock',
+    onClick: function(row) { /* ... */ },
+    isShown: function(row) { /* ... */ }
+  },
+  {
+    name: 'Delete row',
+    iconClass: 'fa-trash-o',
+    onClick: function(row) { /* ... */ },
+    isEnabled: function(row) { /* ... */ }
   }
 });
 ```
@@ -202,10 +155,9 @@ Options
 | `menuPosition` | string | How to calculate the position of the context menu based on its source. Valid values are *aboveLeft*, *aboveRight*, *belowLeft*, and *belowRight*. Defaults to *belowLeft*. |
 | `menuEvent` | string | The event to listen to open the menu. Valid values are *click*, *right-click*, *hover*. Defaults to *right-click*. |
 | `fetchElementData` | function | Obtain specific data about the currently opened element, to pass it to the rest of user-defined functions of an action. |
-| `actions` | array&#124;object | Array or object containing the list of actions to be rendered in the context menu. |
-| `actionsGroups` | array | Array to group actions to render them next to each other, with a separator between each group. |
+| `menuItems` | array&#124;object | Array or object containing the list of items to be rendered in the context menu. |
 
-#### Actions attributes:
+#### Menu Item attributes:
 
 Every function attribute is called before rendering the menu each time it is opened. If `fetchElementData` was defined, these functions will receive as first argument its returned value for the currently selected element.
 
@@ -217,6 +169,7 @@ Every function attribute is called before rendering the menu each time it is ope
 | `classNames` | string&#124;object&#124;function | Optional, classes to add to the action. |
 | `isShown` | function | Optional, decides if the action should be shown or hidden in the context menu. |
 | `isEnabled` | function | Optional, decides if the action should appear enabled or disabled in the context menu. |
+| `subMenuItems ` | array&#124;object | Array or object containing the list of items to be rendered in a submenu. |
 
 
 License
