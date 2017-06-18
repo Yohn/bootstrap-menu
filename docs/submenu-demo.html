@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Bootstrap Context Menu - Submenu Demo</title>
+
+  <!-- BootstrapMenu's styling dependencies -->
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" href="./css/font-awesome.css">
+  <style>
+  .dropdown-submenu {
+    position:relative;
+}
+.dropdown-submenu>.dropdown-menu {
+    top:0;
+    left:100%;
+    margin-top:-6px;
+    margin-left:-1px;
+    -webkit-border-radius:0 6px 6px 6px;
+    -moz-border-radius:0 6px 6px 6px;
+    border-radius:0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+    display:block;
+}
+.dropdown-submenu>a:after {
+    display:block;
+    content:" ";
+    float:right;
+    width:0;
+    height:0;
+    border-color:transparent;
+    border-style:solid;
+    border-width:5px 0 5px 5px;
+    border-left-color:#cccccc;
+    margin-top:5px;
+    margin-right:-10px;
+}
+.dropdown-submenu:hover>a:after {
+    border-left-color:#ffffff;
+}
+.dropdown-submenu.pull-left {
+    float:none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left:-100%;
+    margin-left:10px;
+    -webkit-border-radius:6px 0 6px 6px;
+    -moz-border-radius:6px 0 6px 6px;
+    border-radius:6px 0 6px 6px;
+}
+</style>
+
+  <!-- Other plugins stylesheets for this demo page, unrelated to BootstrapMenu -->
+  <link rel="stylesheet" href="./css/toastr.css">
+  <link rel="stylesheet" href="./css/highlight-8.6.default.min.css">
+
+  <!-- jQuery and BootstrapMenu -->
+  <script src="./js/jquery-3.1.0.min.js"></script>
+  <script src="../dist/BootstrapMenu.js"></script>
+
+  <!-- Other plugins used in this demo page -->
+  <script src="./js/toastr.js"></script>
+  <script src="./js/highlight-8.6.default.min.js"></script>
+
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+
+  <style>
+  pre { padding: 0px; }
+  .marg-top-20 { margin-top: 20px; }
+  .hidden { display: none; }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="./">Bootstrap Context Menu</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Submenu demo</h1>
+
+    <h3>Notes</h3>
+
+    <ul>
+      <li>Dropdown submenus were removed in Bootstrap 3 (see <a href="https://stackoverflow.com/questions/18023493/bootstrap-3-dropdown-sub-menu-missing">see SO post here</a>), so unless you are using this with Bootstrap 2, you will need to include the <a href="#submenu-css">extra CSS</a>.</li>
+      <li>My fork refactors a lot of the <a href="https://github.com/dgoguerra/bootstrap-menu">original library's</a> "actions" code, into "menuItems", which I feel is more consistent with the other default options, and easier to manage the menu/submenu structure.</li>
+      <li>The "actionGroups" option has been removed, in favor of adding "divider" items to the "menuItems" object.</li>
+      <li>The "fa-lg" class has been removed from icons. Set this in the "iconClass" property if you want larger icons.</li>
+    </ul>
+
+    <div class="row marg-top-20">
+      <div class="col-md-6">
+        <div id="demo1Box" class="text-center" style="height: 300px; border:1px solid #ddd">
+          <span style="line-height: 300px">Right click anywhere inside this box</span>
+        </div>
+      </div>
+      <div class="col-md-12 marg-top-20">
+
+<h3 id="submenu-css">New "menuItems" configuration:<h3>
+
+        <pre><code class="lang-js hljs javascript">var menu = new BootstrapMenu('#demo1Box', {
+      menuItems: [{
+        name: 'Submenu',
+        iconClass: 'fa-bars',
+        classNames: 'dropdown-submenu',
+        subMenuItems: [
+          {
+            name: 'Add',
+            iconClass: 'fa-plus',
+            onClick: function() {
+               toastr.info("'Add' clicked!");
+            }
+          },
+          {
+            name: 'Remove',
+            iconClass: 'fa-remove',
+            onClick: function() {
+               toastr.info("'Remove' clicked!");
+            }
+          }
+        ]
+      }, 
+      {
+        divider: true
+      },
+      {
+        name: 'Another action',
+        onClick: function() {
+          toastr.info("'Another action' clicked!");
+        }
+      }, 
+      {
+        name: 'A third action',
+        onClick: function() {
+          toastr.info("'A third action' clicked!");
+        }
+      }]
+    });
+</code></pre>
+      </div>
+    </div>
+
+<h3 id="submenu-css">Submenu CSS (for Bootstrap 3+):<h3>
+
+<pre><code>
+.dropdown-submenu {
+    position:relative;
+}
+.dropdown-submenu>.dropdown-menu {
+    top:0;
+    left:100%;
+    margin-top:-6px;
+    margin-left:-1px;
+    -webkit-border-radius:0 6px 6px 6px;
+    -moz-border-radius:0 6px 6px 6px;
+    border-radius:0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+    display:block;
+}
+.dropdown-submenu>a:after {
+    display:block;
+    content:" ";
+    float:right;
+    width:0;
+    height:0;
+    border-color:transparent;
+    border-style:solid;
+    border-width:5px 0 5px 5px;
+    border-left-color:#cccccc;
+    margin-top:5px;
+    margin-right:-10px;
+}
+.dropdown-submenu:hover>a:after {
+    border-left-color:#ffffff;
+}
+.dropdown-submenu.pull-left {
+    float:none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left:-100%;
+    margin-left:10px;
+    -webkit-border-radius:6px 0 6px 6px;
+    -moz-border-radius:6px 0 6px 6px;
+    border-radius:6px 0 6px 6px;
+}
+</code></pre>
+
+    <script>
+    var menu = new BootstrapMenu('#demo1Box', {
+      menuItems: [{
+        name: 'Submenu',
+        iconClass: 'fa-bars',
+        classNames: 'dropdown-submenu',
+        subMenuItems: [
+          {
+            name: 'Add',
+            iconClass: 'fa-plus',
+            onClick: function() {
+               toastr.info("'Add' clicked!");
+            }
+          },
+          {
+            name: 'Remove',
+            iconClass: 'fa-remove',
+            onClick: function() {
+               toastr.info("'Remove' clicked!");
+            }
+          }
+        ]
+      }, 
+      {
+        divider: true
+      },
+      {
+        name: 'Another action',
+        onClick: function() {
+          toastr.info("'Another action' clicked!");
+        }
+      }, 
+      {
+        name: 'A third action',
+        onClick: function() {
+          toastr.info("'A third action' clicked!");
+        }
+      }]
+    });
+    </script>
+
+
+</body>
+
+</html>
