@@ -70,7 +70,6 @@
 	_.uniqueId = __webpack_require__(49);
 	_.isFunction = __webpack_require__(19);
 
-
 	var defaultOptions = {
 	    /* container of the context menu, where it will be created and where
 	     * event listeners will be installed. */
@@ -93,10 +92,6 @@
 	     * Valid values are 'click', 'right-click', 'hover' */
 	    menuEvent: 'right-click', // TODO rename to menuAction in next mayor version
 
-	    /* group actions to render them next to each other, with a separator
-	     * between each group. */
-	    actionsGroups: [],
-
 	    /* message to show when there are no actions to show in a menu
 	     * (isShown() returned false on all actions) */
 	    noActionsMessage: 'No available actions',
@@ -115,89 +110,80 @@
 	};
 
 	function renderMenu(_this) {
-	    var $menu = $('<div class="dropdown bootstrapMenu" style="z-index:10000;position:absolute;" />');
+	    var $menu = $('<div class="dropdown bootstrapMenu" style="z-index:10000;position:absolute;" />'),
+	    	$ul = $('<ul class="dropdown-menu" style="position:static;display:block;font-size:0.9em;" />'),
+	    	html = '',
+	    	index = 0;
 
-	    var $ul = $('<ul class="dropdown-menu" style="position:static;display:block;font-size:0.9em;" />');
+        _.each(_this.options.menuItems, function(menuItem) {
 
-	    // group all actions following the actionsGroups option, to
-	    // add a separator between each of them.
-	    var groups = [];
+        	// Divider
+        	if ( menuItem.divider !== undefined )
+        	{
+        		html = '<li class="divider"></li>';
+        	}
+        	else
+        	{
+				// Start tag
+	        	html = '<li role="presentation" data-menu-item="' + index + '">';
 
-	    // default group where all ungrouped actions will go
-	    groups[0] = [];
-
-	    // add the rest of groups
-	    _.each(_this.options.actionsGroups, function(groupArr, ind) {
-	        groups[ind+1] = [];
-	    });
-
-	    // find out if any of the actions has an icon
-	    var actionsHaveIcon = false;
-
-	    // add each action to the group it belongs to, or the default group
-	    _.each(_this.options.actions, function(action, actionId) {
-	        var addedToGroup = false;
-
-	        _.each(_this.options.actionsGroups, function(groupArr, ind) {
-	            if (_.contains(groupArr, actionId)) {
-	                groups[ind+1].push(actionId);
-	                addedToGroup = true;
+        		// Add Link
+        		html += '<a href="#" role="menuitem">';
+	            if ( menuItem.iconClass !== undefined ) {
+	                html += '<i class="fa fa-fw ' + menuItem.iconClass + '"></i> ';
 	            }
-	        });
+	            html += '<span class="actionName"></span></a>';
 
-	        if (addedToGroup === false) {
-	            groups[0].push(actionId);
+		        _this.flatItemIndex.push(menuItem);
+		        index ++;
+
+	        	// If has subMenuItems, add submenu class
+	        	if ( menuItem.subMenuItems !== undefined )
+	        	{
+	        		html += '<ul class="dropdown-menu">';
+
+					_.each(menuItem.subMenuItems, function(subMenuItem) {
+						if ( subMenuItem.divider !== undefined )
+			        	{
+			        		html += '<li class="divider"></li>';
+			        	}
+			        	else
+			        	{
+			        		// Start tag
+				        	html += '<li role="presentation" data-menu-item="' + index + '">';
+				        	// Link
+			        		html += '<a href="#" role="menuitem">';
+			        		// Icon
+				            if ( subMenuItem.iconClass !== undefined ) {
+				                html += '<i class="fa fa-fw ' + subMenuItem.iconClass + '"></i> ';
+				            }
+				            html += '<span class="actionName"></span></a>';
+					        // end tag
+					        html += '</li>';
+					        subMenuItem.isSubmenuItem = true;
+					        _this.flatItemIndex.push(subMenuItem);
+					        index++;
+				        }
+					});
+
+					html += '</ul>';
+	        	}
+
+		        // End tag
+		        html += '</li>';
 	        }
 
-	        if (typeof action.iconClass !== 'undefined') {
-	            actionsHaveIcon = true;
-	        }
-	    });
+	        // Add to list
+            $ul.append(html);
+        });
 
-	    var isFirstNonEmptyGroup = true;
-
-	    _.each(groups, function(actionsIds) {
-	        if (actionsIds.length == 0)
-	            return;
-
-	        if (isFirstNonEmptyGroup === false) {
-	            $ul.append('<li class="divider"></li>');
-	        }
-	        isFirstNonEmptyGroup = false;
-
-	        _.each(actionsIds, function(actionId) {
-	            var action = _this.options.actions[actionId];
-
-	            /* At least an action has an icon. Add the icon of the current action,
-	             * or room to align it with the actions which do have one. */
-	            if (actionsHaveIcon === true) {
-	                $ul.append(
-	                    '<li role="presentation" data-action="'+actionId+'">' +
-	                    '<a href="#" role="menuitem">' +
-	                    '<i class="fa fa-fw fa-lg ' + (action.iconClass || '') + '"></i> ' +
-	                    '<span class="actionName"></span>' +
-	                    '</a>' +
-	                    '</li>'
-	                );
-	            }
-	            // neither of the actions have an icon.
-	            else {
-	                $ul.append(
-	                    '<li role="presentation" data-action="'+actionId+'">' +
-	                    '<a href="#" role="menuitem"><span class="actionName"></span></a>' +
-	                    '</li>'
-	                );
-	            }
-	        });
-
-	        $ul.append(
-	            '<li role="presentation" class="noActionsMessage disabled">' +
-	            '<a href="#" role="menuitem">' +
-	            '<span>' + _this.options.noActionsMessage + '</span>' +
-	            '</a>' +
-	            '</li>'
-	        );
-	    });
+        $ul.append(
+            '<li role="presentation" class="noActionsMessage hide disabled">' +
+            '<a href="#" role="menuitem">' +
+            '<span>' + _this.options.noActionsMessage + '</span>' +
+            '</a>' +
+            '</li>'
+        );
 
 	    return $menu.append($ul);
 	}
@@ -245,20 +231,24 @@
 	        evt.stopPropagation();
 
 	        var $target = $(evt.target);
-	        var $action = $target.closest('[data-action]');
+	        var $menuItem = $target.closest('[data-menu-item]');
 
 	        // check if the clicked element is an action, and its enabled.
 	        // if not don't do anything
-	        if (!$action || !$action.length || $action.is('.disabled')) {
+	        if (!$menuItem || !$menuItem.length || $menuItem.is('.disabled')) {
 	            return;
 	        }
 
-	        var actionId = $action.data('action');
+	        var index = $menuItem.data('menu-item');
 	        var targetData = _this.options.fetchElementData(_this.$openTarget);
 
 	        /* call the user click handler. It receives the optional user-defined data,
 	         * or undefined. */
-	        _this.options.actions[actionId].onClick(targetData);
+
+	        if ( _this.flatItemIndex[index].onClick !== undefined )
+	        {
+		        _this.flatItemIndex[index].onClick(targetData);
+		    }
 
 	        // close the menu
 	        _this.close();
@@ -305,6 +295,7 @@
 
 	var BootstrapMenu = function(selector, options) {
 	    this.selector = selector;
+	    this.flatItemIndex = [];
 	    this.options = _.extend({}, defaultOptions, options);
 
 	    // namespaces to use when registering event listeners
@@ -406,49 +397,51 @@
 
 	    var targetData = _this.options.fetchElementData(_this.$openTarget);
 
-	    var $actions = this.$menu.find('[data-action]'),
-	        $noActionsMsg = this.$menu.find('.noActionsMessage');
+	    var $menuItems = this.$menu.find('[data-menu-item]'),
+	    	$noActionsMsg = this.$menu.find('.noActionsMessage');
 
-	    // clear previously hidden actions, and hide by default the 'No actions' message
-	    $actions.show();
-	    $noActionsMsg.hide();
+	    // clear previously hidden actions
+	    $menuItems.show();
 
 	    var numShown = 0;
 
 	    /* go through all actions to update the text to show, which ones to show
 	     * enabled/disabled and which ones to hide. */
-	    $actions.each(function() {
-	        var $action = $(this);
 
-	        var actionId = $action.data('action');
-	        var action = _this.options.actions[actionId];
+	    $menuItems.each(function(i,menuItem) {
+	        var $menuItem = $(this);
 
-	        var classes = action.classNames || null;
+	        var menuItemIndex = $menuItem.data('menu-item');
+
+	        var menuItem = _this.flatItemIndex[menuItemIndex];
+
+	        var classes = menuItem.classNames || null;
 
 	        if (classes && _.isFunction(classes))
 	            classes = classes(targetData);
 
-	        $action.attr('class', classNames(classes || ''));
+	        $menuItem.attr('class', classNames(classes || ''));
 
-	        if (action.isShown && action.isShown(targetData) === false) {
-	            $action.hide();
+	        if (menuItem.isShown && menuItem.isShown(targetData) === false) {
+	            $menuItem.hide();
 	            return;
 	        } else {
 	            numShown++;
 	        }
 
 	        // the name provided for an action may be dynamic, provided as a function
-	        $action.find('.actionName').html(
-	            _.isFunction(action.name) && action.name(targetData) || action.name
+	        $menuItem.find('.actionName').html(
+	            _.isFunction(menuItem.name) && menuItem.name(targetData) || menuItem.name
 	        );
 
-	        if (action.isEnabled && action.isEnabled(targetData) === false) {
-	            $action.addClass('disabled');
+	        if (menuItem.isEnabled && menuItem.isEnabled(targetData) === false) {
+	            $menuItem.addClass('disabled');
 	        }
+
 	    });
 
 	    if (numShown === 0) {
-	        $noActionsMsg.show();
+	        $noActionsMsg.removeClass('hide');
 	    }
 
 	    // once it is known which actions are or arent being shown
