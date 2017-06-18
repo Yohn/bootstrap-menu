@@ -94,7 +94,8 @@ Extended example - with divider and submenu:
 
 ```js
 var menu = new BootstrapMenu('#subMenuDemo', {
-  menuItems: [{
+  menuItems: [
+  {
     name: 'Edit name',
     iconClass: 'fa-pencil',
     onClick: function(row) { /* ... */ },
@@ -108,7 +109,7 @@ var menu = new BootstrapMenu('#subMenuDemo', {
   },
   {
       divider: true
-  }
+  },
   {
     name: 'Submenu Items',
     iconClass: 'fa-bars',
@@ -140,6 +141,7 @@ var menu = new BootstrapMenu('#subMenuDemo', {
     onClick: function(row) { /* ... */ },
     isEnabled: function(row) { /* ... */ }
   }
+  ]
 });
 ```
 
