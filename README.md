@@ -171,7 +171,7 @@ Every function attribute is called before rendering the menu each time it is ope
 | `classNames` | string&#124;object&#124;function | Optional, classes to add to the action. |
 | `isShown` | function | Optional, decides if the action should be shown or hidden in the context menu. |
 | `isEnabled` | function | Optional, decides if the action should appear enabled or disabled in the context menu. |
-| `subMenuItems ` | array&#124;object&#124; | Array or object containing the list of items to be rendered in a submenu, or a function that generates them dynamically. |
+| `subMenuItems ` | array&#124;object&#124;function | Array or object containing the list of items to be rendered in a submenu, or a function that generates them dynamically. |
 
 
 License
