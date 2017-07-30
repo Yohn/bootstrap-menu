@@ -165,13 +165,13 @@ Every function attribute is called before rendering the menu each time it is ope
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `name` | string&#124;function | The name of the action. |
+| `name` | string&#124;function | The name of the action, or a function that generates it dynamically. |
 | `onClick` | function | Handler to run when an action is clicked. |
 | `iconClass` | string | Optional, Font Awesome class of the icon to show for the action. |
 | `classNames` | string&#124;object&#124;function | Optional, classes to add to the action. |
 | `isShown` | function | Optional, decides if the action should be shown or hidden in the context menu. |
 | `isEnabled` | function | Optional, decides if the action should appear enabled or disabled in the context menu. |
-| `subMenuItems ` | array&#124;object | Array or object containing the list of items to be rendered in a submenu. |
+| `subMenuItems ` | array&#124;object&#124; | Array or object containing the list of items to be rendered in a submenu, or a function that generates them dynamically. |
 
 
 License
