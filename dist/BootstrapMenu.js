@@ -1,62 +1,65 @@
+/******/
 (function(modules) { // webpackBootstrap
-     // The module cache
-    
+    /******/ // The module cache
+    /******/
     var installedModules = {};
 
-     // The require function
-    
+    /******/ // The require function
+    /******/
     function __webpack_require__(moduleId) {
 
-         // Check if module is in cache
-        
+        /******/ // Check if module is in cache
+        /******/
         if (installedModules[moduleId])
-            
+            /******/
             return installedModules[moduleId].exports;
 
-         // Create a new module (and put it into the cache)
-        
+        /******/ // Create a new module (and put it into the cache)
+        /******/
         var module = installedModules[moduleId] = {
-            
+            /******/
             exports: {},
-            
+            /******/
             id: moduleId,
-            
+            /******/
             loaded: false
-            
+            /******/
         };
 
-         // Execute the module function
-        
+        /******/ // Execute the module function
+        /******/
         modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 
-         // Flag the module as loaded
-        
+        /******/ // Flag the module as loaded
+        /******/
         module.loaded = true;
 
-         // Return the exports of the module
-        
+        /******/ // Return the exports of the module
+        /******/
         return module.exports;
-        
+        /******/
     }
 
 
-     // expose the modules object (__webpack_modules__)
-    
+    /******/ // expose the modules object (__webpack_modules__)
+    /******/
     __webpack_require__.m = modules;
 
-     // expose the module cache
-    
+    /******/ // expose the module cache
+    /******/
     __webpack_require__.c = installedModules;
 
-     // __webpack_public_path__
-    
+    /******/ // __webpack_public_path__
+    /******/
     __webpack_require__.p = "";
 
-     // Load entry module and return exports
-    
+    /******/ // Load entry module and return exports
+    /******/
     return __webpack_require__(0);
-    
+    /******/
 })
+/************************************************************************/
+/******/
 ([
     /* 0 */
     /***/
@@ -149,9 +152,9 @@
 
                     // Add Link
                     html += '<a href="#" role="menuitem">';
-                    if (menuItem.iconClass !== undefined) {
-                        html += '<i class="fa fa-fw ' + menuItem.iconClass + '"></i> ';
-                    }
+                    // Add Icon
+                    html += '<i class="fa"></i> ';
+                    // Add Name
                     html += '<span class="actionName"></span></a>';
 
                     _this.flatItemIndex.push(menuItem);
@@ -174,7 +177,7 @@
                                     // Link
                                     html += '<a href="#" role="menuitem">';
                                     // Icon
-                                    if (subMenuItem.iconClass !== undefined) {
+                                    if (subMenuItem.iconClass !== undefined && typeof subMenuItem.iconClass === 'string' ) {
                                         html += '<i class="fa fa-fw ' + subMenuItem.iconClass + '"></i> ';
                                     }
                                     html += '<span class="actionName"></span></a>';
@@ -457,10 +460,21 @@
                     numShown++;
                 }
 
-                // Update Name dynamically, if provided as a function
+                // Update Name dynamically
                 $menuItem.find('.actionName').html(
                     _.isFunction(menuItem.name) && menuItem.name(targetData) || menuItem.name
                 );
+
+                // Update Icon dynamically
+                if ( menuItem.iconClass !== undefined )
+                {
+                    var iconClass = _.isFunction(menuItem.iconClass) && menuItem.iconClass(targetData) || menuItem.iconClass
+                }
+
+                if ( iconClass !== undefined )
+                {
+                  $menuItem.find('.fa').attr('class','fa fa-fw ' + iconClass );
+                };
 
                 // Update subMenuItems dynamically, if provided as a function
                 if (_.isFunction(menuItem.subMenuItems) && menuItem.subMenuItems(targetData)) {
@@ -557,10 +571,10 @@
 
         var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
         /*!
-        	  Copyright (c) 2016 Jed Watson.
-        	  Licensed under the MIT License (MIT), see
-        	  http://jedwatson.github.io/classnames
-        	*/
+              Copyright (c) 2016 Jed Watson.
+              Licensed under the MIT License (MIT), see
+              http://jedwatson.github.io/classnames
+            */
         /* global define */
 
         (function() {
@@ -2771,5 +2785,5 @@
 
         /***/
     }
-    
+    /******/
 ]);
