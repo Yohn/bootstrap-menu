@@ -148,7 +148,11 @@
                 else
                 {
                     // Start tag
-                    html = '<li role="presentation" data-menu-item="' + index + '">';
+                    html = '<li role="menu" data-menu-item="' + index + '"';
+                    if ( menuItem.subMenuItems !== undefined ) {
+                      html += ' class="dropdown-submenu"';
+                    }
+                    html += '>';
 
                     // Add Link
                     html += '<a href="#" role="menuitem">';
@@ -173,7 +177,7 @@
                                 else
                                 {
                                     // Start tag
-                                    html += '<li role="presentation" data-menu-item="' + index + '">';
+                                    html += '<li role="menu" data-menu-item="' + index + '">';
                                     // Link
                                     html += '<a href="#" role="menuitem">';
                                     // Icon
@@ -202,7 +206,7 @@
             });
 
             $ul.append(
-                '<li role="presentation" class="noActionsMessage hide disabled">' +
+                '<li role="menu" class="noActionsMessage hide disabled">' +
                 '<a href="#" role="menuitem">' +
                 '<span>' + _this.options.noActionsMessage + '</span>' +
                 '</a>' +
@@ -413,6 +417,14 @@
                 at: relativeToLocation,
                 of: relativeToElem
             });
+
+            // set submenus to show left if they will display out of screen bounds to the right
+            this.$menu.find('.dropdown-submenu').removeClass('pull-left');
+            if ( ( this.$menu.position().left + ( this.$menuList.width() * 2 ) ) > $(window).width() )
+            {
+              this.$menu.find('.dropdown-submenu').addClass('pull-left');
+            }
+
         };
 
         // open the context menu
@@ -440,18 +452,23 @@
              * enabled/disabled and which ones to hide. */
 
             $menuItems.each(function(i, menuItem) {
-                var $menuItem = $(this);
 
-                var menuItemIndex = $menuItem.data('menu-item');
+                var $menuItem = $(this),
+                    menuItemIndex = $menuItem.data('menu-item'),
+                    menuItem = _this.flatItemIndex[menuItemIndex],
+                    baseClasses = $menuItem.attr('class'),
+                    customClasses = menuItem.classNames;
 
-                var menuItem = _this.flatItemIndex[menuItemIndex];
+                // Merge base and custom classes
+                if (customClasses && _.isFunction(customClasses))
+                    customClasses = classes(targetData);
 
-                var classes = menuItem.classNames || null;
+                var outputClasses = classNames(baseClasses,customClasses);
 
-                if (classes && _.isFunction(classes))
-                    classes = classes(targetData);
-
-                $menuItem.attr('class', classNames(classes || ''));
+                if ( outputClasses.length )
+                {
+                  $menuItem.attr('class', outputClasses);
+                }
 
                 if (menuItem.isShown && menuItem.isShown(targetData) === false) {
                     $menuItem.hide();
@@ -497,7 +514,7 @@
                             else
                             {
                                 // Start tag
-                                li += '<li role="presentation">';
+                                li += '<li role="menu">';
                                 // Link
                                 li += '<a href="#" role="menuitem">';
                                 // Icon

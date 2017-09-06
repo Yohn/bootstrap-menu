@@ -113,7 +113,6 @@ var menu = new BootstrapMenu('#subMenuDemo', {
   {
     name: 'Submenu Items',
     iconClass: 'fa-bars',
-    classNames: 'dropdown-submenu',
     onClick: function(row) { /* ... */ },
     isShown: function(row) { /* ... */},
     subMenuItems: [
