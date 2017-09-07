@@ -165,6 +165,7 @@ Every function attribute is called before rendering the menu each time it is ope
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | `name` | string&#124;function | The name of the action, or a function that generates it dynamically. |
+| `title` | string&#124;function | Title attribute for the link, or a function that generates it dynamically. |
 | `onClick` | function | Handler to run when an action is clicked. |
 | `iconClass` | string | Optional, Font Awesome class of the icon to show for the action. |
 | `classNames` | string&#124;object&#124;function | Optional, classes to add to the action. |
