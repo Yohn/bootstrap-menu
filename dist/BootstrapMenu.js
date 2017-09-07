@@ -155,7 +155,12 @@
                     html += '>';
 
                     // Add Link
-                    html += '<a href="#" role="menuitem">';
+                    html += '<a href="#" role="menuitem"';
+                    // Add Title
+                    if ( menuItem.title !== undefined ) {
+                        html += ' title="' + menuItem.title + '"';
+                    }
+                    html += '>';
                     // Add Icon
                     html += '<i class="fa"></i> ';
                     // Add Name
@@ -177,7 +182,13 @@
                                 else
                                 {
                                     // Start tag
-                                    html += '<li role="menu" data-menu-item="' + index + '">';
+                                    html += '<li role="menu" data-menu-item="' + index + '"';
+                                    // Title
+                                    if ( subMenuItem.title !== undefined )
+                                    {
+                                        html += ' title="' + subMenuItem.title + '"';
+                                    }
+                                    html += '>';
                                     // Link
                                     html += '<a href="#" role="menuitem">';
                                     // Icon
@@ -516,7 +527,12 @@
                                 // Start tag
                                 li += '<li role="menu">';
                                 // Link
-                                li += '<a href="#" role="menuitem">';
+                                li += '<a href="#" role="menuitem"';
+                                // Title
+                                if ( subMenuItem.title !== undefined ) {
+                                    li += ' title="' + subMenuItem.title + '"';
+                                }
+                                li += '>';
                                 // Icon
                                 if ( subMenuItem.iconClass !== undefined ) {
                                     li += '<i class="fa fa-fw ' + subMenuItem.iconClass + '"></i> ';
