@@ -90,11 +90,14 @@ var menu = new BootstrapMenu('#button', {
 });
 ```
 
-Extended example - with divider and submenu:
+Full example - with header, divider and submenu:
 
 ```js
 var menu = new BootstrapMenu('#subMenuDemo', {
   menuItems: [
+  {
+      header: 'Actions'
+  },
   {
     name: 'Edit name',
     iconClass: 'fa-pencil',
