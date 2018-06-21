@@ -140,8 +140,10 @@
 
             _.each(_this.options.menuItems, function(menuItem) {
 
-                // Divider
-                if (menuItem.divider !== undefined)
+                if (menuItem.header !== undefined) {
+                  html = '<li class="nav-header">' + menuItem.header + '</li>';
+                }
+                else if (menuItem.divider !== undefined)
                 {
                     html = '<li class="divider"></li>';
                 }
@@ -155,12 +157,7 @@
                     html += '>';
 
                     // Add Link
-                    html += '<a href="#" role="menuitem"';
-                    // Add Title
-                    if ( menuItem.title !== undefined ) {
-                        html += ' title="' + menuItem.title + '"';
-                    }
-                    html += '>';
+                    html += '<a href="#" role="menuitem">';
                     // Add Icon
                     html += '<i class="fa"></i> ';
                     // Add Name
@@ -175,20 +172,17 @@
 
                         if ( typeof menuItem.subMenuItems === 'object' && menuItem.subMenuItems.length ) {
                             _.each(menuItem.subMenuItems, function(subMenuItem) {
-                                if ( subMenuItem.divider !== undefined )
+                                if (subMenuItem.header !== undefined) {
+                                  html = '<li class="nav-header">' + subMenuItem.header + '</li>';
+                                }
+                                else if ( subMenuItem.divider !== undefined )
                                 {
                                     html += '<li class="divider"></li>';
                                 }
                                 else
                                 {
                                     // Start tag
-                                    html += '<li role="menu" data-menu-item="' + index + '"';
-                                    // Title
-                                    if ( subMenuItem.title !== undefined )
-                                    {
-                                        html += ' title="' + subMenuItem.title + '"';
-                                    }
-                                    html += '>';
+                                    html += '<li role="menu" data-menu-item="' + index + '">';
                                     // Link
                                     html += '<a href="#" role="menuitem">';
                                     // Icon
@@ -518,7 +512,11 @@
                         _.each(subMenuItems, function(subMenuItem) {
 
                             li = '';
-                            if ( subMenuItem.divider !== undefined )
+                            if ( subMenuItem.header !== undefined )
+                            {
+                                li += '<li class="nav-header">' + subMenuItem.header + '</li>';
+                            }
+                            else if ( subMenuItem.divider !== undefined )
                             {
                                 li += '<li class="divider"></li>';
                             }
@@ -527,12 +525,7 @@
                                 // Start tag
                                 li += '<li role="menu">';
                                 // Link
-                                li += '<a href="#" role="menuitem"';
-                                // Title
-                                if ( subMenuItem.title !== undefined ) {
-                                    li += ' title="' + subMenuItem.title + '"';
-                                }
-                                li += '>';
+                                li += '<a href="#" role="menuitem">';
                                 // Icon
                                 if ( subMenuItem.iconClass !== undefined ) {
                                     li += '<i class="fa fa-fw ' + subMenuItem.iconClass + '"></i> ';
