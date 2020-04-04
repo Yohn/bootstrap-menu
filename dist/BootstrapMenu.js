@@ -141,7 +141,7 @@
             _.each(_this.options.menuItems, function(menuItem) {
 
                 if (menuItem.header !== undefined) {
-                  html = '<li class="nav-header">' + menuItem.header + '</li>';
+                  html = '<li class="dropdown-header">' + menuItem.header + '</li>';
                 }
                 else if (menuItem.divider !== undefined)
                 {
@@ -173,7 +173,7 @@
                         if ( typeof menuItem.subMenuItems === 'object' && menuItem.subMenuItems.length ) {
                             _.each(menuItem.subMenuItems, function(subMenuItem) {
                                 if (subMenuItem.header !== undefined) {
-                                  html = '<li class="nav-header">' + subMenuItem.header + '</li>';
+                                  html = '<li class="dropdown-header">' + subMenuItem.header + '</li>';
                                 }
                                 else if ( subMenuItem.divider !== undefined )
                                 {
@@ -514,7 +514,7 @@
                             li = '';
                             if ( subMenuItem.header !== undefined )
                             {
-                                li += '<li class="nav-header">' + subMenuItem.header + '</li>';
+                                li += '<li class="dropdown-header">' + subMenuItem.header + '</li>';
                             }
                             else if ( subMenuItem.divider !== undefined )
                             {
